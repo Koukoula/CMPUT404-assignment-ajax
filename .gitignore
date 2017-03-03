@@ -36,3 +36,9 @@ nosetests.xml
 .pydevproject
 *~
 *.swp
+
+venv/.Python
+
+venv/include/python3.5m
+
+venv/pip-selfcheck.json
