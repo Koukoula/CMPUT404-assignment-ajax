@@ -42,3 +42,5 @@ venv/.Python
 venv/include/python3.5m
 
 venv/pip-selfcheck.json
+
+venv/include/python2.7

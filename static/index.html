@@ -21,6 +21,7 @@
         limitations under the License.
     "/>
     <script src="json2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   </head>
   <body bgcolor="black" height="100%" width="100%">
     <canvas id="c" width="100%" height="100%" style="-webkit-tap-highlight-color: transparent;"></canvas>
@@ -38,11 +39,10 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
         if (xhr.readyState==4) {
             try {
                 if (xhr.status==200) {
-                    alert(xhr.responseText)
                     //XXX: parse some JSON from the request!
                     //XXX: Pass the data to the callback!
-                    // var parsed = JSON.parse(xhr.responseText)
-                    //callback(parsed)
+                    var parsed = JSON.parse(xhr.responseText);
+                    callback(parsed);
                 }
             }
             catch(e) {
@@ -53,6 +53,15 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
     //XXX: POST to a URL
     //XXX: set the mimetype and the accept headers!
     // Remember to use application/json !
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      contentType: "application/json",
+      dataType: "json",
+      data: objects,
+      success: callback
+    });
 }
 
 
@@ -141,7 +150,8 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just  modified!
-    sendJSONXMLHTTPRequest(url, world, alert)
+    var url = '/entity/' + entity
+    sendJSONXMLHTTPRequest(url, data, alert)
 
 }
 
@@ -267,6 +277,9 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
     drawFrame();
+    var url = '/world';
+    var objects = ''
+    //sendJSONXMLHTTPRequest(url,objects,alert);
 }
 
 // 30 frames per second

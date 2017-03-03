@@ -83,7 +83,7 @@ def update(entity):
     for key in jsonDict:
         value = jsonDict[key]
         myWorld.update(entity,key,value)
-    return ''
+    return get_entity(entity)
 
 @app.route("/entity/<entity>")
 def get_entity(entity):
@@ -99,7 +99,7 @@ def world():
 def clear():
     '''Clear the world out!'''
     myWorld.clear()
-    return ''
+    return world()
 
 if __name__ == "__main__":
     app.run()
