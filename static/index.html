@@ -24,7 +24,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   </head>
   <body bgcolor="black" height="100%" width="100%">
-    <img src="img_lamp.jpg" id="lamp" width="32" height="32" style="display: none;">
+    <img src="hindle.jpg" id="hindle" style="display: none;">
     <canvas id="c" width="100%" height="100%" style="-webkit-tap-highlight-color: transparent;"></canvas>
     <script>
 var canvas = document.getElementById('c');
@@ -32,12 +32,14 @@ var host = window.location.host;
 var context = canvas.getContext("2d");
 var W = canvas.width  = window.innerWidth-6;
 var H = canvas.height = window.innerHeight-50;
-var gradient = context.createRadialGradient(75,50,5,90,60,100);
-var img = document.getElementById("lamp");
-var pat = context.createPattern(img, "repeat");
-gradient.addColorStop(0,"red");
-gradient.addColorStop(1,"white");
-
+var img = document.getElementById("hindle");
+var pat = context.createPattern(img, "no-repeat");
+var gradient1 = context.createRadialGradient(100, 75, 5, 100, 75, 70);
+gradient1.addColorStop(0,"red");
+gradient1.addColorStop(1,"white");
+var gradient2 = context.createRadialGradient(100, 75, 5, 100, 75, 70);
+gradient2.addColorStop(0,"red");
+gradient2.addColorStop(1,"white");
 
 function sendJSONXMLHTTPRequest(url, objects, callback) {
     var xhr = new XMLHttpRequest();
@@ -78,7 +80,7 @@ function drawCircle(context,entity) {
         //moveTo(x,y);
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
-        arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);
+        arc(x, y, (entity["radius"])?entity["radius"]:60, 0, 2.0 * Math.PI, false);
         fill();
         stroke();
     }
@@ -266,13 +268,21 @@ mouse = (function() {
 // Add the application specific mouse listeners!
 //XXX: TODO Make these prettier!
 mouse.mousedowners.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'blue'});
-    //addEntityWithoutName({'x':x,'y':y,'colour':gradient});
+    //addEntityWithoutName({'x':x,'y':y,'colour':'blue'});
+    //gradient1 = context.createRadialGradient(x, y, 5, x, y, 70);
+    //gradient1.addColorStop(0,"orange");
+    //gradient1.addColorStop(1,"yellow");
+    //addEntityWithoutName({'x':x,'y':y,'colour':gradient1});
+    addEntityWithoutName({'x':x,'y':y,'colour':pat});
 });
 
 mouse.mouseuppers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'red'});
-    //addEntityWithoutName({'x':x,'y':y,'colour':pat});
+    //addEntityWithoutName({'x':x,'y':y,'colour':'red'});
+   // addEntityWithoutName({'x':x,'y':y,'colour':pat});
+    gradient2 = context.createRadialGradient(x, y, 5, x, y, 70);
+    gradient2.addColorStop(0,"orange");
+    gradient2.addColorStop(1,"yellow");
+    addEntityWithoutName({'x':x,'y':y,'colour':gradient2});
 });
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
@@ -280,7 +290,7 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
       //                    'radius':10});
 
     addEntityWithoutName({'x':x,'y':y,'colour':pat,
-                        'radius':10});
+                        'radius':20});
 });
 
 
