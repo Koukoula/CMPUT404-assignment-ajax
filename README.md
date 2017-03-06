@@ -12,4 +12,7 @@ Contributors / Licensing
 
 Generally everything is LICENSE'D under the Apache 2 license by Abram Hindle.
 
+Image of Abram Hindle taken from https://d1pbog36rugm0t.cloudfront.net/-/media/science/people/hindle1/hindle.jpg.
+
+
 
