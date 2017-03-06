@@ -39,7 +39,7 @@
 
 
 import flask
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, make_response
 import json
 app = Flask(__name__)
 app.debug = True
@@ -100,23 +100,31 @@ def update(entity):
     for key in jsonDict:
         value = jsonDict[key]
         myWorld.update(entity,key,value)
-    return get_entity(entity)
+    headers = {"Content-Type":"application/json"}
+    response = json.dumps(get_entity(entity))
+    return make_response(response,200,headers)
 
 @app.route("/entity/<entity>")
 def get_entity(entity):
     '''This is the GET version of the entity interface, return a representation of the entity'''
-    return json.dumps(myWorld.get(entity))
+    headers = {"Content-Type":"application/json"}
+    response = json.dumps(myWorld.get(entity))
+    return make_response(response,200,headers)
 
 @app.route("/world", methods=['POST','GET'])
 def world():
     '''you should probably return the world here'''
-    return json.dumps(myWorld.world())
+    headers = {"Content-Type":"application/json"}
+    response = json.dumps(myWorld.world())
+    return make_response(response,200,headers)
 
 @app.route("/clear", methods=['POST','GET'])
 def clear():
     '''Clear the world out!'''
     myWorld.clear()
-    return world()
+    headers = {"Content-Type":"application/json"}
+    response = json.dumps(myWorld.world())
+    return make_response(response,200,headers)
 
 if __name__ == "__main__":
     app.run()
