@@ -21,7 +21,6 @@
         limitations under the License.
     "/>
     <script src="json2.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   </head>
   <body bgcolor="black" height="100%" width="100%">
     <img src="hindle.jpg" id="hindle" style="display: none;">
@@ -34,12 +33,6 @@ var W = canvas.width  = window.innerWidth-6;
 var H = canvas.height = window.innerHeight-50;
 var img = document.getElementById("hindle");
 var pat = context.createPattern(img, "no-repeat");
-var gradient1 = context.createRadialGradient(100, 75, 5, 100, 75, 70);
-gradient1.addColorStop(0,"red");
-gradient1.addColorStop(1,"white");
-var gradient2 = context.createRadialGradient(100, 75, 5, 100, 75, 70);
-gradient2.addColorStop(0,"red");
-gradient2.addColorStop(1,"white");
 
 function sendJSONXMLHTTPRequest(url, objects, callback) {
     var xhr = new XMLHttpRequest();
@@ -78,11 +71,29 @@ function drawCircle(context,entity) {
         var x = entity["x"];
         var y = entity["y"];
         //moveTo(x,y);
-        fillStyle = entity["colour"];
+        var type = entity["type"]
+        if (type === "image") {
+          fillStyle = pat;
+        }
+        else if (type === 'gradient1') {
+          var gradient = context.createRadialGradient(x, y, 5, x, y, 70);
+          gradient.addColorStop(0,"DarkOrange");
+          gradient.addColorStop(1,"Gold");
+          fillStyle = gradient
+        }
+        else if (type === 'gradient2') {
+          var gradient = context.createRadialGradient(x, y, 5, x, y, 70);
+          gradient.addColorStop(0,"DeepSkyBlue");
+          gradient.addColorStop(1,"LightSteelBlue");
+          fillStyle = gradient
+        }
+        else {
+          fillStyle = entity["colour"];
+        }
         strokeStyle = fillStyle;
         arc(x, y, (entity["radius"])?entity["radius"]:60, 0, 2.0 * Math.PI, false);
         fill();
-        stroke();
+        //stroke();
     }
 }
 
@@ -92,6 +103,9 @@ function prepEntity(entity) {
     }
     if (!entity["radius"]) {
         entity["radius"] = 50;
+    }
+    if (!entity["type"]) {
+        entity["type"] = 'colour';
     }
     return entity;
 }
@@ -268,29 +282,15 @@ mouse = (function() {
 // Add the application specific mouse listeners!
 //XXX: TODO Make these prettier!
 mouse.mousedowners.push(function(x,y,clicked,e) {
-    //addEntityWithoutName({'x':x,'y':y,'colour':'blue'});
-    //gradient1 = context.createRadialGradient(x, y, 5, x, y, 70);
-    //gradient1.addColorStop(0,"orange");
-    //gradient1.addColorStop(1,"yellow");
-    //addEntityWithoutName({'x':x,'y':y,'colour':gradient1});
-    addEntityWithoutName({'x':x,'y':y,'colour':pat});
+    addEntityWithoutName({'x':x,'y':y,'type':'gradient1'})
 });
 
 mouse.mouseuppers.push(function(x,y,clicked,e) {
-    //addEntityWithoutName({'x':x,'y':y,'colour':'red'});
-   // addEntityWithoutName({'x':x,'y':y,'colour':pat});
-    gradient2 = context.createRadialGradient(x, y, 5, x, y, 70);
-    gradient2.addColorStop(0,"orange");
-    gradient2.addColorStop(1,"yellow");
-    addEntityWithoutName({'x':x,'y':y,'colour':gradient2});
+    addEntityWithoutName({'x':x,'y':y,'type':'gradient2'})
 });
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
-    //addEntityWithoutName({'x':x,'y':y,'colour':'green',
-      //                    'radius':10});
-
-    addEntityWithoutName({'x':x,'y':y,'colour':pat,
-                        'radius':20});
+    addEntityWithoutName({'x':x,'y':y,'type':'image'})
 });
 
 
