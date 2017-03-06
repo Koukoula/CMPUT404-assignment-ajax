@@ -101,7 +101,7 @@ def update(entity):
         value = jsonDict[key]
         myWorld.update(entity,key,value)
     headers = {"Content-Type":"application/json"}
-    response = json.dumps(get_entity(entity))
+    response = json.dumps(myWorld.get(entity))
     return make_response(response,200,headers)
 
 @app.route("/entity/<entity>")
